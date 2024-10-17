@@ -1,0 +1,15 @@
+### Create a new Ride
+POST  http://localhost:8000/api/payment
+Content-Type: application/json
+
+{
+  "fullName": "fady User",
+  "email": "fady@example.com",
+  "amount": 20,
+  "driver_id": "60f7d1bcb16f7a8b4a5e12b7",
+  "ride_time": 20,
+  "token": {
+    "email": "test@example.com",
+    "id": "tok_visa"
+  }
+}
