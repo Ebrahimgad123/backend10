@@ -107,6 +107,4 @@ const googleAuthCallback = (req, res, next) => {
 
 
 
-module.exports={registerUser,loginUser,
-                googleAuth,googleAuthCallback
-}
+module.exports={registerUser,loginUser,googleAuth,googleAuthCallback}
