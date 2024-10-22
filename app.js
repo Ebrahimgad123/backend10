@@ -25,7 +25,7 @@ app.use(session({
 }));
 
 // إعداد CORS
-const allowedOrigins = ['http://localhost:3000','http://localhost:3000/login', 'http://localhost:8000'];
+const allowedOrigins = ['http://localhost:3000','http://localhost:3000/login', 'http://localhost:8000','https://tourism.up.railway.app'];
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
