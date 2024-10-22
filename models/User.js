@@ -1,27 +1,17 @@
 const mongoose =require('mongoose')
 
 // نموذج المستخدم
-const userSchema = mongoose.Schema(
+const userSchema =new mongoose.Schema(
   {
-    // التسجيل (Register) وتسجيل الدخول (Login)
-    name: {
-      type: String,
-      required: true, 
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true, 
-    },
+
+    googleId: { type: String},
+    displayName: { type: String, required: true },
+    email: { type: String, required: true,unique:true },
+    profilePicture: { type: String ,default: "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png",},
     password: {
       type: String,
       required: true, 
     },
-    // الملف الشخصي (Profile)
-    imgUser: {
-        type: String,
-        default: "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png",
-      },
     firstName: {
       type: String,
       default: 'your-first-Name', 
