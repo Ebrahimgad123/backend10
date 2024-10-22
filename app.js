@@ -10,21 +10,58 @@ const { logger } = require("./middlewares/logger"); // استيراد المسج
 const { notFound, errorHandling } = require("./middlewares/errorHandler"); // استيراد معالجات الأخطاء
 // const { Server } = require('socket.io'); // استيراد Socket.io
 const { createServer } = require('node:http'); // استيراد HTTP server
+const app = express();
+//////////////////
+// auth google
+///////////////////
+const passport = require('passport');
+const session = require('express-session');
+const User = require('./models/User');
+// إعداد الجلسة
+app.use(session({
+  secret: process.env.SECRET_SESSION, // يفضل استخدام متغير البيئة هنا
+  resave: false,
+  saveUninitialized: true,
+}));
 
+// إعداد CORS
+const allowedOrigins = ['http://localhost:3000','http://localhost:3000/login', 'http://localhost:8000'];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
+
+// إعداد Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport Google Strategy
+require('./passport');
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
 ///////////////////////////////
 // إعداد التطبيق باستخدام Express
-const app = express();
+
 const port = process.env.PORT || 8000; // تعيين المنفذ
 const server = createServer(app); // إنشاء خادم HTTP
 // const io = new Server(server); // إعداد Socket.io
 
 // إعداد محرك العرض
 app.set("view engine", "ejs");
-
 // إعداد الوسطاء (middlewares)
 app.use(express.json()); // تحليل JSON
 app.use(express.urlencoded({ extended: false })); // تحليل البيانات المشفرة
-app.use(cors()); // تمكين CORS
 app.use(compression()); // ضغط الاستجابات
 app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتعطيل سياسة CSP
 
@@ -80,4 +117,6 @@ server.listen(port, () => {
 //   })
   
 // });
+
+
 
