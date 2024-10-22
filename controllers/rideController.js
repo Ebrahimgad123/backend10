@@ -5,12 +5,7 @@ const Ride = require('../models/Ride');
 // @route   POST /api/rides
 // @access  Public
 const createRide = asyncHandler(async (req, res) => {
-  const {
-    origin_address, destination_address, origin_latitude, origin_longitude,
-    destination_latitude, destination_longitude, ride_time, ride_price,
-    payment_status, driver_id, user_email, driver_snapshot
-  } = req.body;
-  
+  const {origin_address, destination_address, origin_latitude, origin_longitude,destination_latitude, destination_longitude, ride_time, ride_price,payment_status, driver_id, user_email, driver_snapshot} = req.body;
   const ride = new Ride({
     origin_address, destination_address, origin_latitude, origin_longitude,
     destination_latitude, destination_longitude, ride_time, ride_price,

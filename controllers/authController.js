@@ -7,7 +7,7 @@ const generateToken = require('../utils/generateToken');
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { displayName, email, password } = req.body;
 
   // Check if user already exists
   const userExists = await User.findOne({ email });
@@ -22,7 +22,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // Create a new user
   const user = new User({
-    name,
+    displayName,
     email,
     password: hashedPassword,
   });
@@ -34,7 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (savedUser) {
     res.status(201).json({
       _id: savedUser._id,
-      name: savedUser.name,
+      displayName: savedUser.displayName,
       email: savedUser.email,
       createdAt: savedUser.createdAt,
       updatedAt: savedUser.updatedAt,
@@ -58,7 +58,7 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user._id,
-      name: user.name,
+      displayName: user.displayName,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id), // Generate a JWT token
@@ -69,4 +69,44 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid email or password');
   }
 });
-module.exports={registerUser,loginUser}
+
+
+
+//auth google 
+
+const passport = require('passport');
+
+// التحكم في طلب تسجيل الدخول عبر Google
+const googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
+
+// التحكم في الـ callback بعد تسجيل الدخول الناجح
+const googleAuthCallback = (req, res, next) => {
+  passport.authenticate('google', { failureRedirect: '/' }, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.redirect('/');
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      console.time('Redirect Time');
+      console.log('Google callback successful, user:', user);
+      res.redirect('http://localhost:3000'); // التوجيه إلى الواجهة الأمامية
+      console.timeEnd('Redirect Time');
+    });
+  })(req, res, next);
+};
+
+
+//
+
+
+
+
+
+module.exports={registerUser,loginUser,
+                googleAuth,googleAuthCallback
+}
