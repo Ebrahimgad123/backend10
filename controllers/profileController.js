@@ -13,7 +13,7 @@ const getProfile = asyncHandler(async (req, res) => {
   
     res.json({
       _id: user._id,
-      imgUser:user.imgUser,
+      profilePicture:user.profilePicture,
       firstName:user.firstName,
       lastName:user.lastName,
       email: user.email,
@@ -38,7 +38,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     // إعداد عنوان URL للصورة المرفوعة
     if (req.file) {
         const imageUrl = `http://localhost:8000/images/${req.file.filename}`;
-        user.imgUser = imageUrl; // تحديث حقل imgUser بالصورة الجديدة
+        user.profilePicture = imageUrl; // تحديث حقل profilePicture بالصورة الجديدة
     }
 
     // تحديث حقول المستخدم الأخرى
@@ -52,7 +52,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 
     res.json({
         _id: updatedUser._id,
-        imgUser: updatedUser.imgUser,
+        profilePicture: updatedUser.profilePicture,
         firstName: updatedUser.firstName,
         lastName: updatedUser.lastName,
         email: updatedUser.email,
