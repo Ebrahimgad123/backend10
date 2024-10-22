@@ -59,7 +59,6 @@ const server = createServer(app); // إنشاء خادم HTTP
 
 // إعداد محرك العرض
 app.set("view engine", "ejs");
-
 // إعداد الوسطاء (middlewares)
 app.use(express.json()); // تحليل JSON
 app.use(express.urlencoded({ extended: false })); // تحليل البيانات المشفرة
