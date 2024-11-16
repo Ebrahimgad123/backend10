@@ -12,44 +12,44 @@ const { notFound, errorHandling } = require("./middlewares/errorHandler"); // ا
 const { createServer } = require('node:http'); // استيراد HTTP server
 const app = express();
 //////////////////
-// auth google
-///////////////////
-const passport = require('passport');
-const session = require('express-session');
-const User = require('./models/User');
-// إعداد الجلسة
-app.use(session({
-  secret: process.env.SECRET_SESSION, // يفضل استخدام متغير البيئة هنا
-  resave: false,
-  saveUninitialized: true,
-}));
+// // auth google
+// ///////////////////
+// const passport = require('passport');
+// const session = require('express-session');
+// const User = require('./models/User');
+// // إعداد الجلسة
+// app.use(session({
+//   secret: process.env.SECRET_SESSION, // يفضل استخدام متغير البيئة هنا
+//   resave: false,
+//   saveUninitialized: true,
+// }));
 
-// إعداد CORS
-const allowedOrigins = ['http://localhost:3000','http://localhost:3000/login', 'http://localhost:8000'];
+// // إعداد CORS
+// const allowedOrigins = ['http://localhost:3000','http://localhost:3000/login', 'http://localhost:8000'];
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
+  // origin: allowedOrigins,
+  // credentials: true,
 }));
 
-// إعداد Passport.js
-app.use(passport.initialize());
-app.use(passport.session());
+// // إعداد Passport.js
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-// Passport Google Strategy
-require('./passport');
+// // Passport Google Strategy
+// require('./passport');
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
+// passport.serializeUser((user, done) => {
+//   done(null, user.id);
+// });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err, null);
-  }
-});
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const user = await User.findById(id);
+//     done(null, user);
+//   } catch (err) {
+//     done(err, null);
+//   }
+// });
 ///////////////////////////////
 // إعداد التطبيق باستخدام Express
 
@@ -76,9 +76,9 @@ app.use(logger);
 
 /////////////////////////////////////
 // // إضافة المسارات الخاصة بـ API
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'index.html')); // إرسال ملف HTML
-// });
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html')); // إرسال ملف HTML
+});
 
 // إعداد المسارات الخاصة بالـ API
 app.get("/",(req,res)=>{
@@ -89,7 +89,7 @@ app.get("/",(req,res)=>{
 app.use("/api", require("./routes/authRoute"));
 app.use("/api", require("./routes/profileRoute"));
 app.use('/api',require("./routes/rideRoutes"));
-app.use('/api',require("./routes/paymentRoute"));
+app.use('/api',require("./routes/citiesRoute"));
 
 
 // التعامل مع الأخطاء
