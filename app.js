@@ -11,47 +11,7 @@ const { notFound, errorHandling } = require("./middlewares/errorHandler"); // ا
 // const { Server } = require('socket.io'); // استيراد Socket.io
 const { createServer } = require('node:http'); // استيراد HTTP server
 const app = express();
-//////////////////
-// // auth google
-// ///////////////////
-// const passport = require('passport');
-// const session = require('express-session');
-// const User = require('./models/User');
-// // إعداد الجلسة
-// app.use(session({
-//   secret: process.env.SECRET_SESSION, // يفضل استخدام متغير البيئة هنا
-//   resave: false,
-//   saveUninitialized: true,
-// }));
 
-// // إعداد CORS
-// const allowedOrigins = ['http://localhost:3000','http://localhost:3000/login', 'http://localhost:8000'];
-app.use(cors({
-  // origin: allowedOrigins,
-  // credentials: true,
-}));
-
-// // إعداد Passport.js
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// // Passport Google Strategy
-// require('./passport');
-
-// passport.serializeUser((user, done) => {
-//   done(null, user.id);
-// });
-
-// passport.deserializeUser(async (id, done) => {
-//   try {
-//     const user = await User.findById(id);
-//     done(null, user);
-//   } catch (err) {
-//     done(err, null);
-//   }
-// });
-///////////////////////////////
-// إعداد التطبيق باستخدام Express
 
 const port = process.env.PORT || 8000; // تعيين المنفذ
 const server = createServer(app); // إنشاء خادم HTTP
