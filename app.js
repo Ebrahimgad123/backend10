@@ -24,7 +24,7 @@ app.use(express.json()); // تحليل JSON
 app.use(express.urlencoded({ extended: false })); // تحليل البيانات المشفرة
 app.use(compression()); // ضغط الاستجابات
 app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتعطيل سياسة CSP
-
+app.use(cors())
 // // تقديم ملفات Socket.io
 // app.use('/socket.io', express.static(path.join(__dirname, 'node_modules/socket.io/client-dist')));
 
