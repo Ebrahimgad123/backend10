@@ -35,7 +35,11 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false }  // ضع true إذا كنت تستخدم HTTPS
 }));
-app.use(cors())
+app.use(cors({
+  origin: 'https://tour-relax.vercel.app',
+  credentials: true
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('public'));
