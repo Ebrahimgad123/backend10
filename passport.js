@@ -22,7 +22,6 @@ passport.use(new GoogleStrategy({
           { new: true, upsert: true } 
         );
         done(null, user);
-        console.log('User in session:', req.user);
       } catch (error) {
         console.error('Error in saving user:', error);
         done(error, null); 
@@ -31,12 +30,10 @@ passport.use(new GoogleStrategy({
   
 
   passport.serializeUser((user, done) => {
-    console.log('User in session:', req.user);
     done(null, user.id); 
 });
   
 passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id); 
-    console.log('User in session:', req.user);
     done(null, user);
 });
