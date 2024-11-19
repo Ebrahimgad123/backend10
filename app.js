@@ -27,11 +27,6 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// مساراتك الأخرى...
-
-app.listen(8000, () => {
-  console.log('Server is running on port 8000');
-});
 
 // إعداد المنفذ
 const port = process.env.PORT || 8000; 
