@@ -7,7 +7,7 @@ const getProfile = asyncHandler(async (req, res) => {
     return res.status(401).json({ message: "User not authenticated" });
   }
 
-  const user = req.user; // المستخدم الذي تم التحقق من صحته من خلال الجلسة
+  const user = req.user; 
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });

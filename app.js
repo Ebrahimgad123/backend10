@@ -30,9 +30,10 @@ app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتع
 
 // auth google
 app.use(session({
-  secret: 'mysecret',
+  secret: 'mySecret', 
   resave: false,
   saveUninitialized: false,
+  cookie: { secure: false }  // ضع true إذا كنت تستخدم HTTPS
 }));
 app.use(cors())
 app.use(passport.initialize());
