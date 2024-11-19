@@ -3,10 +3,6 @@ const mongoose = require('mongoose');
 const asyncHandler=require('express-async-handler')
 
 const getProfile = asyncHandler(async (req, res) => {
-  if (!req.user) {
-    return res.status(401).json({ message: "User not authenticated" });
-  }
-
   const user = req.user; 
 
   if (!user) {
