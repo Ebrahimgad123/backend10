@@ -12,69 +12,68 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-require('./passport');
-// const { Server } = require('socket.io'); // استيراد Socket.io
+require('./passport'); // إعداد المصادقة عبر Passport
 const { createServer } = require('node:http'); // استيراد HTTP server
 const app = express();
 
-
-const port = process.env.PORT || 8000; // تعيين المنفذ
+// إعداد المنفذ
+const port = process.env.PORT || 8000; 
 const server = createServer(app); // إنشاء خادم HTTP
-// const io = new Server(server); // إعداد Socket.io
 
 app.set("view engine", "ejs");
 
+// Middleware للإعدادات المختلفة
 app.use(express.json()); // تحليل JSON
 app.use(express.urlencoded({ extended: false })); // تحليل البيانات المشفرة
 app.use(compression()); // ضغط الاستجابات
-app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتعطيل سياسة CSP
+app.use(helmet()); // إضافة أمان بواسطة Helmet
 
 app.use(cookieParser());
-// auth google
+
+// إعداد الجلسات مع Passport
 const MongoStore = require('connect-mongo');
 app.use(session({
-  secret: 'your-secret-key',
+  secret: process.env.SESSION_SECRET || 'Secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true },
+  cookie: { secure: process.env.NODE_ENV === 'production' }, // تأكد من أنك في بيئة آمنة
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
 
-
+// إعداد CORS للسماح بالطلبات من الواجهة الأمامية
 app.use(cors({
   origin: 'https://tour-relax.vercel.app',
   credentials: true
 }));
 
+// إعداد Passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+// تقديم الملفات الثابتة
 app.use(express.static('public'));
-app.set('view engine', 'ejs');
-
-//
-// app.use('/socket.io', express.static(path.join(__dirname, 'node_modules/socket.io/client-dist')));
-
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-
+// إعداد المسجل لتسجيل النشاطات
 app.use(logger);
 
-
+// إعداد مسارات التطبيق
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html')); // إرسال ملف HTML
+  res.sendFile(path.join(__dirname, 'index.html')); // إرسال ملف HTML عند الوصول إلى الجذر
 });
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
   res.send(`<h2 style="color:green;text-align:center">Welcome To Our Api App</h2>
-            <h2 style="color:green;text-align:center">I will show you How To use it</h2>
-    `)
-})
+            <h2 style="color:green;text-align:center">I will show you How To use it</h2>`);
+});
+
+// ربط المسارات الخاصة بالمصادقة والملفات الأخرى
 app.use("/api", require("./routes/authRoute"));
 app.use("/api", require("./routes/profileRoute"));
-app.use('/api',require("./routes/rideRoutes"));
-app.use('/api',require("./routes/citiesRoute"));
+app.use('/api', require("./routes/rideRoutes"));
+app.use('/api', require("./routes/citiesRoute"));
 
-
+// التعامل مع الأخطاء
 app.use(notFound);
 app.use(errorHandling);
 
