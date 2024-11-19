@@ -4,38 +4,36 @@ const User = require('./models/User');
 require('dotenv').config();
 
 passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_SECRET_ID,
-  callbackURL: process.env.CALLBACK_URL,
-}, async (accessToken, refreshToken, profile, done) => {
-    console.log(profile.photos);
-  try {
-    let user = await User.findOneAndUpdate(
-      { googleId: profile.id },
-      {
-        googleId: profile.id,
-        displayName: profile.displayName,
-        email: profile.emails[0].value,
-        profilePicture: profile.photos[0].value,
-      },
-      { new: true, upsert: true }
-    );
-    done(null, user);
-  } catch (error) {
-    console.error('Error in saving user:', error);
-    done(error, null);
-  }
-}));
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_SECRET_ID,
+    callbackURL: process.env.CALLBACK_URL,
+  }, async (accessToken, refreshToken, profile, done) => {
+      console.log(profile.photos); // طباعة معلومات الصور الخاصة بالمستخدم (اختياري)
+    
+      try {
+        let user = await User.findOneAndUpdate(
+          { googleId: profile.id },
+          {
+            googleId: profile.id,
+            displayName: profile.displayName,
+            email: profile.emails[0].value,
+            profilePicture: profile.photos[0].value,
+          },
+          { new: true, upsert: true } // إذا لم يكن هناك مستخدم سيتم إنشاؤه
+        );
+        done(null, user); // إرجاع المستخدم بعد التحديث أو الإنشاء
+      } catch (error) {
+        console.error('Error in saving user:', error);
+        done(error, null); // في حال حدوث خطأ
+      }
+  }));
+  
 
-passport.serializeUser((user, done) => {
-  done(null, user._id);
+  passport.serializeUser((user, done) => {
+    done(null, user.id); 
 });
-
+  
 passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
+    const user = await User.findById(id); 
     done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
 });
