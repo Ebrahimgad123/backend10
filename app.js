@@ -47,7 +47,7 @@ const MongoStore = require('connect-mongo');
 app.use(session({
   secret: 'Secret',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: {
     secure: false, // تأكد من أن secure:true في بيئة الإنتاج (HTTPS)
     httpOnly: true, // حماية من الوصول للكوكيز عبر JavaScript
