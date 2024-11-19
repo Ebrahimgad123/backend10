@@ -34,8 +34,8 @@ app.use(cookieParser());
 app.use(session({
   secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }  // تأكد من ضبط secure إذا كنت تستخدم HTTPS
+  saveUninitialized: false,
+  cookie: { secure: true },
 }));
 
 

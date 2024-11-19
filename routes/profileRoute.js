@@ -30,9 +30,9 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter });
 
 // Profile routes
-router.route('/profile')
-    .get(getProfile)   // Get user profile
-    .put(verifyTokensAndAuthorization, upload.single("image"), updateProfile); // Update user profile
+// router.route('/profile')
+//     .get(getProfile)   // Get user profile
+//     .put(verifyTokensAndAuthorization, upload.single("image"), updateProfile); // Update user profile
 
 module.exports = router; // Export the router
 
