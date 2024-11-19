@@ -1,29 +1,30 @@
 const User = require('../models/User');
 const mongoose = require('mongoose');
 const asyncHandler=require('express-async-handler')
-// @desc Get user profile
-// @route GET /api/profile
-// @access Private (token required)
+
 const getProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id);
-    
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-  
-    res.json({
-      _id: user._id,
-      profilePicture:user.profilePicture,
-      firstName:user.firstName,
-      lastName:user.lastName,
-      email: user.email,
-      emailStatus:user.emailStatus,
-      phoneNumber:user.phoneNumber,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    });
+  if (!req.user) {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+
+  const user = req.user; // المستخدم الذي تم التحقق من صحته من خلال الجلسة
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.json({
+    _id: user._id,
+    profilePicture: user.profilePicture,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    emailStatus: user.emailStatus,
+    phoneNumber: user.phoneNumber,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   });
-  
+});
 
 // @desc Update user profile
 // @route PUT /api/profile

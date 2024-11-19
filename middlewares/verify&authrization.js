@@ -16,7 +16,7 @@ function verifyTokens(req, res, next) {
     return res.status(401).json({ message: "Invalid token" });
   }
 }
-// المستخدم العادي: يمكنه فقط تعديل أو الوصول إلى معلوماته الشخصية.
+
 function verifyTokensAndAuthorization(req, res, next) {
   verifyTokens(req, res, (err) => {
     if (err) {
