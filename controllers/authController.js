@@ -80,23 +80,23 @@ const googleAuth = (req, res, next) => {
 
 // معالجة رد Google OAuth
 const googleAuthCallback = (req, res, next) => {
-  passport.authenticate('google', (err, user, info) => {
+  passport.authenticate('google', (err, user) => {
     if (err) {
-      console.log('Error during authentication:', err);
+      console.error('Google authentication error:', err);
+      return res.redirect('https://tour-relax.vercel.app/login'); // في حالة حدوث خطأ
     }
     if (!user) {
-      console.log('Authentication failed, no user:', info);
+      return res.redirect('https://tour-relax.vercel.app/login'); // إذا لم يتم العثور على المستخدم
     }
-    req.logIn(user, (err) => {
-      if (err) {
-        console.log('Error logging in user:', err);
-        return res.redirect('/login');
+    req.login(user, (loginErr) => {
+      if (loginErr) {
+        console.error('Error logging in user:', loginErr);
+        return res.redirect('https://tour-relax.vercel.app/login');
       }
-      console.log('User logged in successfully:', user);
-      return res.redirect('/profile');
+      // تسجيل الدخول بنجاح
+      return res.redirect('https://tour-relax.vercel.app/getlocation');
     });
   })(req, res, next);
-  
 };
 
 module.exports = {
