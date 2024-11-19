@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const asyncHandler=require('express-async-handler')
 
 const getProfile = asyncHandler(async (req, res) => {
-  const user = req.user; 
+  const user =  req.session.user;; 
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });

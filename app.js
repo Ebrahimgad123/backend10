@@ -32,9 +32,14 @@ app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتع
 app.use(session({
   secret: 'mySecret', 
   resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false }  // ضع true إذا كنت تستخدم HTTPS
+  saveUninitialized: true,
+  cookie: {
+    secure: false, // ضع true إذا كنت تستخدم HTTPS
+    httpOnly: true,
+    sameSite: 'None', // للسماح بتبادل الكوكيز عبر النطاقات المختلفة
+  }  // ضع true إذا كنت تستخدم HTTPS
 }));
+
 app.use(cors({
   origin: 'https://tour-relax.vercel.app',
   credentials: true
