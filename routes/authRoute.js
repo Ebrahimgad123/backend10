@@ -25,9 +25,6 @@ router.get('/logout', (req, res) => {
 
 
 router.get('/profile', (req, res) => {
-  console.log('User:', req.user);  // طباعة بيانات المستخدم إذا كانت موجودة
-  console.log('Is authenticated:', req.isAuthenticated());  // التحقق إذا كان المستخدم تم المصادقة عليه
-  
   if (req.isAuthenticated()) {
     res.json({
       displayName: req.user.displayName,
@@ -38,7 +35,6 @@ router.get('/profile', (req, res) => {
     res.status(401).json({ message: 'Unauthorized: Please log in first.' });
   }
 });
-
 
 
 

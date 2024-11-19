@@ -30,11 +30,11 @@ passport.use(new GoogleStrategy({
   
 
   passport.serializeUser((user, done) => {
-    done(null, user.id); 
+    done(null, user.id);  // هنا تخزن فقط الـ ID للمستخدم
   });
   
   passport.deserializeUser(async (id, done) => {
-    const user = await User.findById(id);  
+    const user = await User.findById(id);  // استرجاع بيانات المستخدم باستخدام الـ ID
     done(null, user);
   });
   
