@@ -5,10 +5,10 @@ const asyncHandler = require('express-async-handler');
 
 // الحصول على الملف الشخصي
 const getProfile = asyncHandler(async (req, res) => {
+  const user = req.session.user; // تأكد من استخدام `req.session.user`
 
-  const user = req.session; // التأكد من وجود المستخدم في الجلسة
- 
-  console.log(req.session)
+  console.log(req.session); // للتأكد مما إذا كانت الجلسة تحتوي على البيانات المطلوبة
+
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
@@ -25,6 +25,7 @@ const getProfile = asyncHandler(async (req, res) => {
     updatedAt: user.updatedAt,
   });
 });
+
 
 // تحديث الملف الشخصي
 const updateProfile = asyncHandler(async (req, res) => {
