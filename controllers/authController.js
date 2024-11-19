@@ -73,17 +73,36 @@ const loginUser = asyncHandler(async (req, res) => {
 
 //auth google
 
+// بدء مصادقة Google
 const googleAuth = (req, res, next) => {
   passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
 };
 
+// معالجة رد Google OAuth
 const googleAuthCallback = (req, res, next) => {
-  passport.authenticate('google', {
-    successRedirect: 'https://tour-relax.vercel.app/getlocation',
-    failureRedirect: 'https://tour-relax.vercel.app/login',
+  passport.authenticate('google', (err, user) => {
+    if (err) {
+      console.error('Google authentication error:', err);
+      return res.redirect('https://tour-relax.vercel.app/login'); // في حالة حدوث خطأ
+    }
+    if (!user) {
+      return res.redirect('https://tour-relax.vercel.app/login'); // إذا لم يتم العثور على المستخدم
+    }
+    req.login(user, (loginErr) => {
+      if (loginErr) {
+        console.error('Error logging in user:', loginErr);
+        return res.redirect('https://tour-relax.vercel.app/login');
+      }
+      // تسجيل الدخول بنجاح
+      return res.redirect('https://tour-relax.vercel.app/getlocation');
+    });
   })(req, res, next);
 };
 
+module.exports = {
+  googleAuth,
+  googleAuthCallback,
+};
 
 
 
