@@ -4,25 +4,27 @@ const asyncHandler = require('express-async-handler');
 
 
 // الحصول على الملف الشخصي
+// في المسار الذي يسترجع الملف الشخصي
 const getProfile = asyncHandler(async (req, res) => {
-  const user = req.session; 
-    console.log(user)
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  if (req.session && req.session.user) {
+    console.log("User session:", req.session.user);
+    res.json({
+      _id: req.session.user._id,
+      profilePicture: req.session.user.profilePicture,
+      firstName: req.session.user.firstName,
+      lastName: req.session.user.lastName,
+      email: req.session.user.email,
+      emailStatus: req.session.user.emailStatus,
+      phoneNumber: req.session.user.phoneNumber,
+      createdAt: req.session.user.createdAt,
+      updatedAt: req.session.user.updatedAt,
+    });
+  } else {
+    res.status(404).json({ message: "User not found in session" });
   }
-
-  res.json({
-    _id: user._id,
-    profilePicture: user.profilePicture,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    emailStatus: user.emailStatus,
-    phoneNumber: user.phoneNumber,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-  });
 });
+
+
 
 
 // تحديث الملف الشخصي

@@ -32,15 +32,10 @@ app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتع
 app.use(cookieParser());
 // auth google
 app.use(session({
-  secret: 'mySecret',
+  secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: false, 
-  cookie: {
-    secure: false, 
-    httpOnly: true,
-    sameSite: 'None',
-    maxAge: 1000 * 60 * 60 * 24 // 24 ساعة
-  }
+  saveUninitialized: true,
+  cookie: { secure: false }  // تأكد من ضبط secure إذا كنت تستخدم HTTPS
 }));
 
 
