@@ -1,6 +1,6 @@
 const mongoose =require('mongoose')
 
-// نموذج المستخدم
+
 const userSchema =new mongoose.Schema(
   {
 
@@ -22,7 +22,7 @@ const userSchema =new mongoose.Schema(
     },
     emailStatus: {
       type: String,
-      enum: ['Unverified', 'Verified'], // الحالتان الممكنتان
+      enum: ['Unverified', 'Verified'], 
       default: 'Verified',
     },
     phoneNumber: {
@@ -30,15 +30,14 @@ const userSchema =new mongoose.Schema(
     },
     isAdmin: {
       type: Boolean,
-      default: false, // حالة التحقق إذا كان المستخدم مشرفًا
+      default: false, 
     },
   },
   {
-    timestamps: true, // إضافة الطوابع الزمنية (تاريخ الإنشاء وتاريخ التعديل)
+    timestamps: true, 
   }
 );
 
-// إنشاء الموديل
 const User = mongoose.model('User', userSchema);
 
 module.exports=User;

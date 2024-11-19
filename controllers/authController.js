@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken');
-
+const passport = require('passport');
 // @desc    Register a new user
 // @route   POST /api/auth/register
 // @access  Public
@@ -71,38 +71,18 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 
+//auth google
 
-//auth google 
-
-const passport = require('passport');
-
-// التحكم في طلب تسجيل الدخول عبر Google
-const googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
-
-// التحكم في الـ callback بعد تسجيل الدخول الناجح
-const googleAuthCallback = (req, res, next) => {
-  passport.authenticate('google', { failureRedirect: '/' }, (err, user) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.redirect('/');
-    }
-    req.logIn(user, (err) => {
-      if (err) {
-        return next(err);
-      }
-      console.time('Redirect Time');
-      console.log('Google callback successful, user:', user);
-      res.redirect('http://localhost:3000'); // التوجيه إلى الواجهة الأمامية
-      console.timeEnd('Redirect Time');
-    });
-  })(req, res, next);
+const googleAuth = (req, res, next) => {
+  passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
 };
 
-
-//
-
+const googleAuthCallback = (req, res, next) => {
+  passport.authenticate('google', {
+    successRedirect: 'https://tour-relax.vercel.app/getlocation',
+    failureRedirect: 'https://tour-relax.vercel.app/login',
+  })(req, res, next);
+};
 
 
 
