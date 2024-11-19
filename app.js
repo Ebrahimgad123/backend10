@@ -16,6 +16,23 @@ require('./passport'); // إعداد المصادقة عبر Passport
 const { createServer } = require('node:http'); // استيراد HTTP server
 const app = express();
 
+app.use(cookieParser());
+
+app.use((req, res, next) => {
+  console.log('Cookies:', req.cookies);  // طباعة الكوكيز التي أرسلها المتصفح
+  next();
+});
+
+// بقية الميدل وير الخاص بك
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// مساراتك الأخرى...
+
+app.listen(8000, () => {
+  console.log('Server is running on port 8000');
+});
+
 // إعداد المنفذ
 const port = process.env.PORT || 8000; 
 const server = createServer(app); // إنشاء خادم HTTP
@@ -28,17 +45,22 @@ app.use(express.urlencoded({ extended: false })); // تحليل البيانات
 app.use(compression()); // ضغط الاستجابات
 app.use(helmet()); // إضافة أمان بواسطة Helmet
 
-app.use(cookieParser());
+
 
 // إعداد الجلسات مع Passport
 const MongoStore = require('connect-mongo');
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'Secret',
+  secret: 'Secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: process.env.NODE_ENV === 'production' }, // تأكد من أنك في بيئة آمنة
+  cookie: {
+    secure: false, // تأكد من أن secure:true في بيئة الإنتاج (HTTPS)
+    httpOnly: true, // حماية من الوصول للكوكيز عبر JavaScript
+    maxAge: 1000 * 60 * 60 * 24 // مدة صلاحية الـ session
+  },
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
+
 
 // إعداد CORS للسماح بالطلبات من الواجهة الأمامية
 app.use(cors({
@@ -76,6 +98,7 @@ app.use('/api', require("./routes/citiesRoute"));
 // التعامل مع الأخطاء
 app.use(notFound);
 app.use(errorHandling);
+
 
 // بدء الخادم
 server.listen(port, () => {
