@@ -2,10 +2,13 @@ const User = require('../models/User');
 const mongoose = require('mongoose');
 const asyncHandler = require('express-async-handler');
 
+
 // الحصول على الملف الشخصي
 const getProfile = asyncHandler(async (req, res) => {
-  const user = req.session.user; // التأكد من وجود المستخدم في الجلسة
 
+  const user = req.session; // التأكد من وجود المستخدم في الجلسة
+ 
+  console.log(req.session)
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }

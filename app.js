@@ -11,6 +11,7 @@ const { notFound, errorHandling } = require("./middlewares/errorHandler");
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 require('./passport');
 // const { Server } = require('socket.io'); // استيراد Socket.io
 const { createServer } = require('node:http'); // استيراد HTTP server
@@ -28,17 +29,20 @@ app.use(express.urlencoded({ extended: false })); // تحليل البيانات
 app.use(compression()); // ضغط الاستجابات
 app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتعطيل سياسة CSP
 
+app.use(cookieParser());
 // auth google
 app.use(session({
-  secret: 'mySecret', 
+  secret: 'mySecret',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false, 
   cookie: {
-    secure: false, // ضع true إذا كنت تستخدم HTTPS
+    secure: false, 
     httpOnly: true,
-    sameSite: 'None', // للسماح بتبادل الكوكيز عبر النطاقات المختلفة
-  }  // ضع true إذا كنت تستخدم HTTPS
+    sameSite: 'None',
+    maxAge: 1000 * 60 * 60 * 24 // 24 ساعة
+  }
 }));
+
 
 app.use(cors({
   origin: 'https://tour-relax.vercel.app',

@@ -8,7 +8,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_SECRET_ID,
     callbackURL: process.env.CALLBACK_URL,
   }, async (accessToken, refreshToken, profile, done) => {
-      console.log(profile.photos); // طباعة معلومات الصور الخاصة بالمستخدم (اختياري)
+      console.log(profile.photos); 
     
       try {
         let user = await User.findOneAndUpdate(
@@ -19,21 +19,24 @@ passport.use(new GoogleStrategy({
             email: profile.emails[0].value,
             profilePicture: profile.photos[0].value,
           },
-          { new: true, upsert: true } // إذا لم يكن هناك مستخدم سيتم إنشاؤه
+          { new: true, upsert: true } 
         );
-        done(null, user); // إرجاع المستخدم بعد التحديث أو الإنشاء
+        done(null, user);
+        console.log('User in session:', req.user);
       } catch (error) {
         console.error('Error in saving user:', error);
-        done(error, null); // في حال حدوث خطأ
+        done(error, null); 
       }
   }));
   
 
   passport.serializeUser((user, done) => {
+    console.log('User in session:', req.user);
     done(null, user.id); 
 });
   
 passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id); 
+    console.log('User in session:', req.user);
     done(null, user);
 });
