@@ -31,11 +31,13 @@ app.use(helmet({ contentSecurityPolicy: false })); // إعداد Helmet، وتع
 
 app.use(cookieParser());
 // auth google
+const MongoStore = require('connect-mongo');
 app.use(session({
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: { secure: true },
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
 
 
