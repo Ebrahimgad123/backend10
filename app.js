@@ -49,12 +49,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: false, // تأكد من أن secure:true في بيئة الإنتاج (HTTPS)
-    httpOnly: true, // حماية من الوصول للكوكيز عبر JavaScript
-    maxAge: 1000 * 60 * 60 * 24 // مدة صلاحية الـ session
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24 
   },
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
+
 
 
 // إعداد CORS للسماح بالطلبات من الواجهة الأمامية
