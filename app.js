@@ -59,7 +59,7 @@ app.use(session({
 
 // إعداد CORS للسماح بالطلبات من الواجهة الأمامية
 app.use(cors({
-  origin: 'https://tour-relax.vercel.app',
+  origin: ['https://tour-relax.vercel.app', 'http://localhost:3000'],
   credentials: true
 }));
 
