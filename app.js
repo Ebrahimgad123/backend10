@@ -51,7 +51,7 @@ app.use(session({
   cookie: {
     secure: false, // تأكد من أن secure:true في بيئة الإنتاج (HTTPS)
     httpOnly: true, // حماية من الوصول للكوكيز عبر JavaScript
-    maxAge: 1000 * 60 * 60 * 24 // مدة صلاحية الـ session
+    maxAge: 1000 * 20 // مدة صلاحية الـ session
   },
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
