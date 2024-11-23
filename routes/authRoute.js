@@ -15,12 +15,8 @@ router.get('/auth/google', googleAuth);
 router.get('/auth/google/callback', googleAuthCallback);
 
 router.get('/logout', (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return res.send('Error during logout');
-    }
-    res.redirect('/');
-  });
+  req.session.destroy(); 
+  res.send('تم تسجيل الخروج!');
 });
 
 

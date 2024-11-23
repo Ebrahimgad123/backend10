@@ -75,7 +75,10 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // بدء مصادقة Google
 const googleAuth = (req, res, next) => {
-  passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'], 
+    prompt: 'select_account' // إضافة الخيار داخل الكائن
+  })(req, res, next);
 };
 
 // معالجة رد Google OAuth
