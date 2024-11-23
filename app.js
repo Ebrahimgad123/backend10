@@ -50,7 +50,7 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production', // تأمين الكوكيز في HTTPS فقط
     httpOnly: true, // منع الوصول للكوكيز عبر JavaScript
-    sameSite: 'None', // السماح بالنطاقات المختلفة
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     maxAge: 1000 * 60 * 60 * 24 // مدة الصلاحية (يوم واحد)
   },
   store: MongoStore.create({
