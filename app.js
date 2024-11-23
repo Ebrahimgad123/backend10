@@ -51,7 +51,7 @@ app.use(session({
   cookie: {
     secure: false,         // في بيئة الإنتاج يجب أن تكون true مع HTTPS
     httpOnly: true,        // منع JavaScript من الوصول إلى الكوكيز
-    maxAge: 1000 * 60 * 60 * 24 // مدة صلاحية الجلسة
+
   },
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI // رابط قاعدة البيانات
