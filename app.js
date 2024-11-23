@@ -45,8 +45,8 @@ app.use(helmet()); // إضافة أمان بواسطة Helmet
 const MongoStore = require('connect-mongo');
 app.use(session({
   secret: 'sessionSecret', // سر الجلسة
-  resave: false,           // عدم إعادة حفظ الجلسة إذا لم يتم تعديلها
-  saveUninitialized: true, // حفظ الجلسات الجديدة
+  resave: false, 
+  saveUninitialized: false, 
 
   cookie: {
     secure: false,         // في بيئة الإنتاج يجب أن تكون true مع HTTPS
