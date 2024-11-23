@@ -44,15 +44,19 @@ app.use(helmet()); // إضافة أمان بواسطة Helmet
 // إعداد الجلسات مع Passport
 const MongoStore = require('connect-mongo');
 app.use(session({
-  secret: 'sessionSecret',
-  resave: false,    // عدم إعادة حفظ الجلسة إذا لم يتم تعديلها
-  saveUninitialized: true,   // حفظ الجلسات الجديدة حتى لو لم تُعدل
+  secret: 'sessionSecret', // سر الجلسة
+  resave: false,           // عدم إعادة حفظ الجلسة إذا لم يتم تعديلها
+  saveUninitialized: true, // حفظ الجلسات الجديدة
+
   cookie: {
-    secure: false, // تأكد من أن secure:true في بيئة الإنتاج (HTTPS)
-    httpOnly: true, // حماية من الوصول للكوكيز عبر JavaScript
-    maxAge: 1000 * 60 * 60 *24* 24 // مدة صلاحية الـ session
+    secure: false,   // في بيئة الإنتاج يجب أن تكون true مع HTTPS
+    sameSite: "None",      
+    httpOnly: true,        // منع JavaScript من الوصول إلى الكوكيز
+    maxAge: 1000 * 60 * 60 * 24 // مدة صلاحية الجلسة
   },
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI // رابط قاعدة البيانات
+  })
 }));
 
 
