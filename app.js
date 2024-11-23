@@ -45,18 +45,19 @@ app.use(helmet()); // إضافة أمان بواسطة Helmet
 const MongoStore = require('connect-mongo');
 app.use(session({
   secret: 'sessionSecret', // سر الجلسة
-  resave: false, 
-  saveUninitialized: false, 
-
+  resave: false,
+  saveUninitialized: false,
   cookie: {
-    secure: false,         // في بيئة الإنتاج يجب أن تكون true مع HTTPS
-    httpOnly: true,        // منع JavaScript من الوصول إلى الكوكيز
-    maxAge: 1000 * 60 * 60 * 24 // مدة صلاحية الجلسة
+    secure: process.env.NODE_ENV === 'production', // تأمين الكوكيز في HTTPS فقط
+    httpOnly: true, // منع الوصول للكوكيز عبر JavaScript
+    sameSite: 'None', // السماح بالنطاقات المختلفة
+    maxAge: 1000 * 60 * 60 * 24 // مدة الصلاحية (يوم واحد)
   },
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI // رابط قاعدة البيانات
   })
 }));
+
 
 
 // إعداد CORS للسماح بالطلبات من الواجهة الأمامية
