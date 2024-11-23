@@ -16,7 +16,7 @@ router.get('/auth/google/callback', googleAuthCallback);
 
 router.get('/logout', (req, res) => {
   req.session.destroy(); 
-  res.send('تم تسجيل الخروج!');
+  res.send('You logged Out successfully');
 });
 
 

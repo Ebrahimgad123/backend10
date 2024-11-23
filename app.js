@@ -29,37 +29,37 @@ app.use(express.urlencoded({ extended: false }));
 
 // إعداد المنفذ
 const port = process.env.PORT || 8000; 
-const server = createServer(app); // إنشاء خادم HTTP
+const server = createServer(app); 
 
 app.set("view engine", "ejs");
 
-// Middleware للإعدادات المختلفة
-app.use(express.json()); // تحليل JSON
-app.use(express.urlencoded({ extended: false })); // تحليل البيانات المشفرة
-app.use(compression()); // ضغط الاستجابات
-app.use(helmet()); // إضافة أمان بواسطة Helmet
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false })); 
+app.use(compression()); 
+app.use(helmet()); 
 
 
 
 // إعداد الجلسات مع Passport
 const MongoStore = require('connect-mongo');
 app.use(session({
-  secret: 'sessionSecret', // سر الجلسة
-  resave: false,           // عدم إعادة حفظ الجلسة إذا لم يتم تعديلها
-  saveUninitialized: true, // حفظ الجلسات الجديدة
+  secret: 'sessionSecret', 
+  resave: false,         
+  saveUninitialized: true, 
 
   cookie: {
-    secure: false,         // في بيئة الإنتاج يجب أن تكون true مع HTTPS
-    httpOnly: true,        // منع JavaScript من الوصول إلى الكوكيز
+    secure: false,      
+    httpOnly: true,     
     maxAge: 1000 * 60 * 60 * 24 
   },
   store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI // رابط قاعدة البيانات
+    mongoUrl: process.env.MONGO_URI 
   })
 }));
 
 
-// إعداد CORS للسماح بالطلبات من الواجهة الأمامية
+
 app.use(cors({
   origin: ['https://tour-relax.vercel.app', 'http://localhost:3000'],
   credentials: true
@@ -69,16 +69,16 @@ app.use(cors({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// تقديم الملفات الثابتة
+
 app.use(express.static('public'));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-// إعداد المسجل لتسجيل النشاطات
+
 app.use(logger);
 
-// إعداد مسارات التطبيق
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html')); // إرسال ملف HTML عند الوصول إلى الجذر
+  res.sendFile(path.join(__dirname, 'index.html')); 
 });
 
 app.get("/", (req, res) => {
