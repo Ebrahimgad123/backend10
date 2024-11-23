@@ -81,6 +81,7 @@ const googleAuth = (req, res, next) => {
   })(req, res, next);
 };
 
+
 //  Google callback
 const googleAuthCallback = (req, res, next) => {
   passport.authenticate('google', (err, user) => {
@@ -95,12 +96,6 @@ const googleAuthCallback = (req, res, next) => {
     });
   })(req, res, next);
 };
-
-module.exports = {
-  googleAuth,
-  googleAuthCallback,
-};
-
 
 
 module.exports={registerUser,loginUser,googleAuth,googleAuthCallback}
