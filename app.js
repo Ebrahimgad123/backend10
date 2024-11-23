@@ -49,8 +49,7 @@ app.use(session({
   saveUninitialized: true, // حفظ الجلسات الجديدة
 
   cookie: {
-    secure: false,   // في بيئة الإنتاج يجب أن تكون true مع HTTPS
-    sameSite: "None",      
+    secure: false,         // في بيئة الإنتاج يجب أن تكون true مع HTTPS
     httpOnly: true,        // منع JavaScript من الوصول إلى الكوكيز
     maxAge: 1000 * 60 * 60 * 24 // مدة صلاحية الجلسة
   },
