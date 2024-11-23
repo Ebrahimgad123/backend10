@@ -51,7 +51,7 @@ app.use(session({
   cookie: {
     secure: false,         // في بيئة الإنتاج يجب أن تكون true مع HTTPS
     httpOnly: true,        // منع JavaScript من الوصول إلى الكوكيز
-
+    maxAge: 1000 * 60 * 60 * 24 
   },
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI // رابط قاعدة البيانات
@@ -88,23 +88,22 @@ app.get("/", (req, res) => {
 app.get('/logout', (req, res) => {
   req.logout(err => {
     if (err) return next(err);
-    res.clearCookie('connect.sid'); // إزالة الكوكيز
-    res.redirect('/'); // إعادة التوجيه للصفحة الرئيسية
+    res.clearCookie('connect.sid'); 
+    res.redirect('/'); 
   });
 });
 
-// ربط المسارات الخاصة بالمصادقة والملفات الأخرى
 app.use("/api", require("./routes/authRoute"));
 app.use("/api", require("./routes/profileRoute"));
 app.use('/api', require("./routes/rideRoutes"));
 app.use('/api', require("./routes/citiesRoute"));
 
-// التعامل مع الأخطاء
+
 app.use(notFound);
 app.use(errorHandling);
 
 
-// بدء الخادم
+
 server.listen(port, () => {
   console.log(`Server is listening on port ${port} in ${process.env.NODE_ENV} mode`);
 });
