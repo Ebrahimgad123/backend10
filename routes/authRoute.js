@@ -19,14 +19,12 @@ router.get('/logout', (req, res) => {
   res.send('You logged Out successfully');
 });
 
-
-router.get('/profile', (req, res) => {
-    res.json({
-      displayName: req.user.displayName,
-      email: req.user.email,
-      profilePicture: req.user.profilePicture,
-    });
-
+router.get("/profile", (req, res) => {
+  res.status(200).json({
+    displayName: req.user.displayName,
+    email: req.user.email,
+    profilePicture: req.user.photos ? req.user.photos[0].value : null,
+  });
 });
 
 
