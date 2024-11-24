@@ -10,6 +10,7 @@ const { notFound, errorHandling } = require("./middlewares/errorHandler");
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
+const cookieSession=require('cookie-session')
 const cookieParser = require('cookie-parser');
 require('./passport'); 
 const { createServer } = require('node:http'); // استيراد HTTP server
@@ -42,22 +43,27 @@ app.use(helmet());
 
 
 // إعداد الجلسات مع Passport
-const MongoStore = require('connect-mongo');
-app.use(session({
-  secret: 'sessionSecret', 
-  resave: false,         
-  saveUninitialized: true, 
+// const MongoStore = require('connect-mongo');
+// app.use(session({
+//   secret: 'sessionSecret', 
+//   resave: false,         
+//   saveUninitialized: true, 
 
-  cookie: {
-    secure: false,      
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 
-  },
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI 
+//   cookie: {
+//     secure: false,      
+//     httpOnly: true,
+//     maxAge: 1000 * 60 * 60 * 24 
+//   },
+//   store: MongoStore.create({
+//     mongoUrl: process.env.MONGO_URI 
+//   })
+// }));
+app.use(
+  cookieSession({  
+    keys: [process.env.COOKIE_KEY], 
+    maxAge: 24 * 60 * 60 * 1000, // مدة الصلاحية (24 ساعة)
   })
-}));
-
+);
 
 
 app.use(cors({
