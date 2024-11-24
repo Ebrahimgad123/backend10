@@ -35,8 +35,7 @@ const server = createServer(app);
 app.set("view engine", "ejs");
 
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false })); 
+
 app.use(compression()); 
 app.use(helmet()); 
 
@@ -59,9 +58,12 @@ app.use(helmet());
 //   })
 // }));
 app.use(
-  cookieSession({  
+  cookieSession({
+    name: "session",
     keys: [process.env.COOKIE_KEY], 
-    maxAge: 24 * 60 * 60 * 1000, // مدة الصلاحية (24 ساعة)
+    maxAge: 24 * 60 * 60 * 1000, 
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // الجلسة تعمل على HTTPS فقط في وضع الإنتاج
   })
 );
 
