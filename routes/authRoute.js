@@ -23,7 +23,7 @@ router.get("/profile", (req, res) => {
   res.status(200).json({
     displayName: req.user.displayName,
     email: req.user.email,
-    profilePicture: req.user.photos ? req.user.photos[0].value : null,
+    profilePicture: req.user.profilePicture ? req.user.photos[0].value : null,
   });
 });
 
