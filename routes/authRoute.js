@@ -12,7 +12,7 @@ router.post('/login', loginUser);
 
 
 
-router.get('/auth/google',auth, googleAuth);
+router.get('/auth/google', googleAuth);
 router.get('/auth/google/callback',auth, googleAuthCallback);
 
 router.get('/logout', (req, res) => {
