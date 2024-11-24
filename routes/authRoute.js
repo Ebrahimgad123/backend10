@@ -22,7 +22,8 @@ router.get('/logout', (req, res) => {
 
 
 router.get("/profile", (req, res) => {
-  if (!req.user) {
+  console.log('Session Data:', req.user);
+  if (!req.session.user) {
     return res.status(401).json({ message: "User not authenticated" });
   }
 

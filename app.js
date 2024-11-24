@@ -57,15 +57,16 @@ app.use(session({
 }));
 
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use(cors({
   origin: ['https://tour-relax.vercel.app', 'http://localhost:3000','https://linguistic-josephine-nooragniztion-eccb8a70.koyeb.app'],
   credentials: true
 }));
 
-// إعداد Passport
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 
 app.use(express.static('public'));
