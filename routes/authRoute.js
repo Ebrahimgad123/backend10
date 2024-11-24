@@ -19,13 +19,17 @@ router.get('/logout', (req, res) => {
   res.send('You logged Out successfully');
 });
 
-router.get("/profile", (req, res) => {
+
+
+// ثم استخدمها في المسار الخاص بـ profile
+router.get("/profile",  (req, res) => {
   res.status(200).json({
     displayName: req.user.displayName,
     email: req.user.email,
-    profilePicture: req.user.profilePicture ? req.user.photos[0].value : null,
+    profilePicture: req.user.profilePicture
   });
 });
+
 
 
 
