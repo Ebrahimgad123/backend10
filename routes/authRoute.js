@@ -13,7 +13,7 @@ router.post('/login', loginUser);
 
 
 router.get('/auth/google', googleAuth);
-router.get('/auth/google/callback',auth, googleAuthCallback);
+router.get('/auth/google/callback', googleAuthCallback);
 
 router.get('/logout', (req, res) => {
   req.session.destroy(); 
@@ -22,7 +22,7 @@ router.get('/logout', (req, res) => {
 
 
 
-router.get("/profile",auth, (req, res) => {
+router.get("/profile", (req, res) => {
   console.log('Session Data:', req.user);
   //  من الدتابيز
   res.status(200).json({
