@@ -24,7 +24,6 @@ router.get('/logout', (req, res) => {
 
 router.get("/profile", (req, res) => {
   console.log('Session Data:', req.user);
-  //  من الدتابيز
   res.status(200).json({
     displayName: req.user.displayName,
     email: req.user.email,

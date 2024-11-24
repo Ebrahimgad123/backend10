@@ -93,8 +93,8 @@ app.get('/logout', (req, res) => {
 });
 
 app.use("/api", require("./routes/authRoute"));
-app.use("/api", require("./routes/profileRoute"));
-app.use('/api', require("./routes/rideRoutes"));
+// app.use("/api", require("./routes/profileRoute"));
+// app.use('/api', require("./routes/rideRoutes"));
 app.use('/api', require("./routes/citiesRoute"));
 
 
