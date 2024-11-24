@@ -21,14 +21,18 @@ router.get('/logout', (req, res) => {
 
 
 
-// ثم استخدمها في المسار الخاص بـ profile
-router.get("/profile",  (req, res) => {
+router.get("/profile", (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+
   res.status(200).json({
     displayName: req.user.displayName,
     email: req.user.email,
-    profilePicture: req.user.profilePicture
+    profilePicture: req.user.profilePicture,
   });
 });
+
 
 
 
