@@ -3,6 +3,7 @@ const {registerUser,loginUser}=require('../controllers/authController')
 const router = express.Router();
 const passport = require('passport');
 const { googleAuth, googleAuthCallback } = require('../controllers/authController');
+const {auth} = require("../middlewares/auth");
 // Route for user registration
 router.post('/register', registerUser);
 // Route for user login
@@ -11,8 +12,8 @@ router.post('/login', loginUser);
 
 
 
-router.get('/auth/google', googleAuth);
-router.get('/auth/google/callback', googleAuthCallback);
+router.get('/auth/google',auth, googleAuth);
+router.get('/auth/google/callback',auth, googleAuthCallback);
 
 router.get('/logout', (req, res) => {
   req.session.destroy(); 
@@ -21,7 +22,7 @@ router.get('/logout', (req, res) => {
 
 
 
-router.get("/profile", (req, res) => {
+router.get("/profile",auth, (req, res) => {
   console.log('Session Data:', req.user);
   //  من الدتابيز
   res.status(200).json({
