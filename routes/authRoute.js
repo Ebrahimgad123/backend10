@@ -21,15 +21,12 @@ router.get('/logout', (req, res) => {
 
 
 router.get('/profile', (req, res) => {
-  if (req.isAuthenticated()) {
     res.json({
       displayName: req.user.displayName,
       email: req.user.email,
       profilePicture: req.user.profilePicture,
     });
-  } else {
-    res.status(401).json({ message: 'Unauthorized: Please log in first.' });
-  }
+
 });
 
 
