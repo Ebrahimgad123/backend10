@@ -23,12 +23,16 @@ router.get('/logout', (req, res) => {
 
 router.get("/profile", (req, res) => {
   console.log('Session Data:', req.user);
-
-
+  //  من الدتابيز
   res.status(200).json({
     displayName: req.user.displayName,
     email: req.user.email,
     profilePicture: req.user.profilePicture,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    isAdmin: req.user.isAdmin,
+    createdAt: req.user.createdAt,
+    updatedAt: req.user.updatedAt,
   });
 });
 

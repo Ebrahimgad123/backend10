@@ -73,7 +73,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
 //auth google
 
-
 const googleAuth = (req, res, next) => {
   passport.authenticate('google', { 
     scope: ['profile', 'email'], 
@@ -81,21 +80,30 @@ const googleAuth = (req, res, next) => {
   })(req, res, next);
 };
 
-
-//  Google callback
+// Google callback
 const googleAuthCallback = (req, res, next) => {
-  passport.authenticate('google', (err, user) => {
- 
+  passport.authenticate('google', async (err, user) => {
+    if (err) {
+      console.error('Authentication error:', err);
+      return res.redirect('/login');  // Redirect to login on authentication error
+    }
+
+    if (!user) {
+      console.error('No user found after Google authentication');
+      return res.redirect('/login');  // Redirect if no user data is returned
+    }
+
+    // Log the user in and create a session
     req.login(user, (loginErr) => {
       if (loginErr) {
         console.error('Error logging in user:', loginErr);
-        return res.redirect('https://tour-relax.vercel.app/login');
+        return res.redirect('https://tour-relax.vercel.app/login');  // Redirect to login on login error
       }
-      
+
+      // If everything is successful, redirect to the next page
       return res.redirect('https://tour-relax.vercel.app/getlocation');
     });
   })(req, res, next);
 };
 
-
-module.exports={registerUser,loginUser,googleAuth,googleAuthCallback}
+module.exports = { registerUser, loginUser, googleAuth, googleAuthCallback };
