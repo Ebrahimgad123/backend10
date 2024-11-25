@@ -33,26 +33,33 @@ passport.use(new GoogleStrategy({
       },
       { new: true, upsert: true }  // Update or insert a new user
     );
-    
+ 
+
     done(null, user);
+
   } catch (error) {
     console.error('Error in saving user:', error);
     done(error, null);
   }
 }));
 
-// Serialize user data to store in session (only store user ID to reduce session size)
+
 passport.serializeUser((user, done) => {
-  done(null, user.id);  // Store user ID in session
+  console.log("=============User=====================", user._id.toString());
+  done(null, user._id.toString()); 
 });
 
-// Deserialize user based on user ID from session (fetch full user data from DB)
+
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);  // Retrieve full user details
-    done(null, user);  // Send back full user data
+    // استرداد بيانات المستخدم من قاعدة البيانات باستخدام المعرف
+    const user = await User.findById(id);
+    if (!user) {
+      return done(new Error("User not found"), null); // في حال عدم وجود المستخدم
+    }
+    done(null, user); // إرجاع بيانات المستخدم
   } catch (error) {
-    console.error('Error in deserializing user:', error);
-    done(error, null);  // Return error if something goes wrong
+    console.error("Error in deserializing user:", error);
+    done(error, null); // إرجاع الخطأ
   }
 });

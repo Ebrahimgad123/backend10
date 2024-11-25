@@ -79,31 +79,41 @@ const googleAuth = (req, res, next) => {
     prompt: 'select_account'
   })(req, res, next);
 };
-
-// Google callback
 const googleAuthCallback = (req, res, next) => {
   passport.authenticate('google', async (err, user) => {
     if (err) {
       console.error('Authentication error:', err);
-      return res.redirect('/login');  // Redirect to login on authentication error
+      return res.redirect('/login'); // إعادة التوجيه عند حدوث خطأ
     }
 
     if (!user) {
       console.error('No user found after Google authentication');
-      return res.redirect('/login');  // Redirect if no user data is returned
+      return res.redirect('/login'); // إعادة التوجيه إذا لم يتم العثور على المستخدم
     }
 
-    // Log the user in and create a session
-    req.login(user, (loginErr) => {
-      if (loginErr) {
-        console.error('Error logging in user:', loginErr);
-        return res.redirect('https://tour-relax.vercel.app/login');  // Redirect to login on login error
-      }
+    try {
+      // تسجيل دخول المستخدم وإنشاء جلسة
+      req.login(user, (loginErr) => {
+        if (loginErr) {
+          console.error('Error logging in user:', loginErr);
+          return res.redirect('https://tour-relax.vercel.app/login'); // إعادة التوجيه عند حدوث خطأ
+        }
+          
+        res.cookie('userId', user._id.toString(), {
+          httpOnly: true, // الكوكي آمن ولا يمكن الوصول إليه عبر JavaScript
+          secure: process.env.NODE_ENV === 'production', // يُرسل فقط عبر HTTPS في بيئة الإنتاج
+          maxAge: 7 * 24 * 60 * 60 * 1000, // الكوكي صالح لمدة 7 أيام
+          sameSite: 'strict', // منع إرسال الكوكي مع الطلبات الخارجية
+        });
 
-      // If everything is successful, redirect to the next page
-      return res.redirect('https://tour-relax.vercel.app/getlocation');
-    });
+        // إعادة التوجيه بعد تسجيل الدخول الناجح
+        return res.redirect('https://tour-relax.vercel.app/getlocation');
+      });
+    } catch (error) {
+      console.error('Unexpected error during login:', error);
+      return res.redirect('https://tour-relax.vercel.app/login');
+    }
   })(req, res, next);
 };
 
-module.exports = { registerUser, loginUser, googleAuth, googleAuthCallback };
+module.exports = { googleAuth, googleAuthCallback,registerUser ,loginUser};

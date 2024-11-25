@@ -17,6 +17,7 @@ const { createServer } = require('node:http'); // استيراد HTTP server
 const app = express();
 app.use(cookieParser());
 
+
 app.use((req, res, next) => {
   console.log('Cookies:', req.cookies);  
   next();
@@ -42,7 +43,7 @@ app.use(helmet());
 // إعداد الجلسات مع Passport
 const MongoStore = require('connect-mongo');
 app.use(session({
-  secret: 'sessionSecret', 
+  secret: 'sessionSecret2345678765467', 
   resave: false,         
   saveUninitialized: true, 
 
@@ -106,6 +107,22 @@ app.use(errorHandling);
 server.listen(port, () => {
   console.log(`Server is listening on port ${port} in ${process.env.NODE_ENV} mode`);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // // إعداد Socket.io
 // io.on('connection', (socket) => {
