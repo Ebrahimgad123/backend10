@@ -41,26 +41,21 @@ app.use(helmet());
 
 
 // إعداد الجلسات مع Passport
-
-
 const MongoStore = require('connect-mongo');
-
 app.use(session({
-  secret: 'sessionSecret2345678765467', // كلمة السر الخاصة بالجلسة
-  resave: false, // لا تحفظ الجلسة إذا لم يتغير شيء
-  saveUninitialized: true, // حفظ الجلسة إذا لم يتم تهيئتها
+  secret: 'sessionSecret2345678765467', 
+  resave: false,         
+  saveUninitialized: true, 
+
   cookie: {
-    httpOnly: true, // يجعل الكوكيز غير قابلة للوصول عبر JavaScript
-    secure: process.env.NODE_ENV === 'production', // تأكد من أن الكوكيز تكون آمنة في بيئة الإنتاج
-    sameSite: 'None', // السماح بالكوكيز عبر النطاقات المختلفة
-    maxAge: 1000 * 60 * 60 * 24 // تحديد مدة صلاحية الكوكيز
+    secure: true,      
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 
   },
   store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI, // اتصال بقاعدة البيانات MongoDB
+    mongoUrl: process.env.MONGO_URI 
   })
 }));
-
-
 
 
 app.use(passport.initialize());
