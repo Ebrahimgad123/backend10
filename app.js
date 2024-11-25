@@ -41,21 +41,17 @@ app.use(helmet());
 
 
 // إعداد الجلسات مع Passport
-const MongoStore = require('connect-mongo');
-app.use(session({
-  secret: 'sessionSecret2345678765467', 
-  resave: false,         
-  saveUninitialized: true, 
 
-  cookie: {
-    secure: true,      
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 
-  },
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI 
-  })
+app.use(cookieSession({
+  name: 'session',
+  secret: 'sessionSecret2345678765467', 
+  maxAge: 1000 * 60 * 60 * 24,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'None',
+  domain: '.tour-relax.vercel.app' // تحديد النطاق الصحيح
 }));
+
 
 
 app.use(passport.initialize());
