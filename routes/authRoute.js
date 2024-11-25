@@ -30,7 +30,6 @@ router.get("/profile", async (req, res) => {
   try {
     // استخراج userId من الكوكيز
     const { userId } = req.cookies;
-
     if (!userId) {
       return res.status(400).json({ message: "User ID not found in cookies" });
     }

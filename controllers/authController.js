@@ -99,12 +99,13 @@ const googleAuthCallback = (req, res, next) => {
           return res.redirect('https://tour-relax.vercel.app/login'); // إعادة التوجيه عند حدوث خطأ
         }
           
-        res.cookie('userId', user._id.toString(), {
-          httpOnly: true, // الكوكي آمن ولا يمكن الوصول إليه عبر JavaScript
-          secure: process.env.NODE_ENV === 'production', // يُرسل فقط عبر HTTPS في بيئة الإنتاج
-          maxAge: 7 * 24 * 60 * 60 * 1000, // الكوكي صالح لمدة 7 أيام
-          sameSite: 'strict', // منع إرسال الكوكي مع الطلبات الخارجية
+        res.cookie('userId', userId, {
+          httpOnly: true,          // يمنع الوصول إلى الكوكيز عبر JavaScript
+          secure: process.env.NODE_ENV === 'production', // التأكد من إرسال الكوكيز فقط عبر HTTPS في بيئة الإنتاج
+          sameSite: 'None',        // يسمح بإرسال الكوكيز عبر نطاقات مختلفة
+          domain: '.tour-relax.vercel.app', // يتيح إرسال الكوكيز إلى كافة النطاقات الفرعية
         });
+        
 
         // إعادة التوجيه بعد تسجيل الدخول الناجح
         return res.redirect('https://tour-relax.vercel.app/getlocation');
