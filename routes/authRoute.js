@@ -17,10 +17,20 @@ router.post('/login', loginUser);
 router.get('/auth/google', googleAuth);
 router.get('/auth/google/callback', googleAuthCallback);
 
-router.get('/logout', (req, res) => {
-  req.session.destroy(); 
-  res.send('You logged Out successfully');
-});
+router.post('/logout',(req,res)=>{
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      res.status(500).json({ message: 'Internal Server Error' });
+      return;
+    }
+
+    res.clearCookie('connect.sid'); 
+    res.clearCookie('userId'); 
+    res.json({ message: 'Logged out successfully' });
+  });
+})
+
 
 
 

@@ -40,21 +40,21 @@ app.use(helmet());
 
 
 
-// إعداد الجلسات مع Passport
-const MongoStore = require('connect-mongo');
-app.use(session({
-  secret: 'sessionSecret2345678765467', 
-  resave: false,         
-  saveUninitialized: true, 
 
-  cookie: {
-    secure: true,      
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 
-  },
+const MongoStore = require('connect-mongo');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'sessionSecret2345678765467',
+  resave: false,
+  saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI 
-  })
+    mongoUrl: process.env.MONGO_URI ,
+  }),
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', 
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24, 
+  },
 }));
 
 
