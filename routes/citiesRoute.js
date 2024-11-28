@@ -142,4 +142,54 @@ router.get('/tours/:tourId', async (req, res) => {
   }
 });
 
+
+
+
+router.get('/tours', async (req, res) => {
+  try {
+    const { longitude, latitude } = req.query;
+
+
+    const lng = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+
+    if (isNaN(lng) || isNaN(lat) || lng < -180 || lng > 180 || lat < -90 || lat > 90) {
+      return res.status(400).json({ error: 'إحداثيات غير صالحة.' });
+    }
+
+    const maxDistance = 10000000; // Consider making this configurable
+    const nearbyTours = await Tour.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [lng, lat],
+          },
+          distanceField: 'dist.calculated',
+          spherical: true,
+          maxDistance: maxDistance,
+        },
+      },
+    ]);
+
+    const results = nearbyTours.map(tour => ({
+      id: tour._id,
+      name: tour.name,
+      image: tour.image,
+      duration: tour.duration,
+      distance: Math.round(tour.dist.calculated / 1000),
+    }));
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'لا توجد جولات قريبة.' });
+    }
+
+    res.json(results);
+  } catch (err) {
+    console.error('Error finding nearby tours:', err);
+    res.status(500).json({ error: 'حدث خطأ أثناء استرجاع الجولات.' });
+  }
+});
+
+
 module.exports = router;
