@@ -1,7 +1,6 @@
 # Node modules
 node_modules/
 
-.env
 # Logs
 logs
 *.log
@@ -23,8 +22,5 @@ temp/
 .DS_Store
 Thumbs.db
 
-# 
-# 
-.gitignore
+# Secrets and sensitive files
 .env
-
