@@ -63,7 +63,7 @@ app.use(passport.session());
 
 
 app.use(cors({
-  origin: ['https://tour-relax.vercel.app', 'http://localhost:3000','https://linguistic-josephine-nooragniztion-eccb8a70.koyeb.app'],
+  origin: ['http://localhost:3000','http://localhost:9000'],
   credentials: true
 }));
 
@@ -102,7 +102,9 @@ app.use('/api', require("./routes/citiesRoute"));
 app.use(notFound);
 app.use(errorHandling);
 
-
+app.use("*" ,(req, res) => {
+  res.status(404).json({ message: "Page Not Found" });
+});
 
 server.listen(port, () => {
   console.log(`Server is listening on port ${port} in ${process.env.NODE_ENV} mode`);
