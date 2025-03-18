@@ -96,7 +96,7 @@ const googleAuthCallback = (req, res, next) => {
       req.login(user, (loginErr) => {
         if (loginErr) {
           console.error('Error logging in user:', loginErr);
-          return res.redirect('http://localhost:3001/login'); // إعادة التوجيه عند حدوث خطأ
+          return res.redirect('https://front-graduation.vercel.app/login'); // إعادة التوجيه عند حدوث خطأ
         }
         res.cookie('userId', user._id.toString(), {
           httpOnly: true, 
@@ -107,11 +107,11 @@ const googleAuthCallback = (req, res, next) => {
 
 
         // إعادة التوجيه بعد تسجيل الدخول الناجح
-        return res.redirect('http://localhost:3001/getlocation');
+        return res.redirect('https://front-graduation.vercel.app/getlocation');
       });
     } catch (error) {
       console.error('Unexpected error during login:', error);
-      return res.redirect('http://localhost:3001/login');
+      return res.redirect('https://front-graduation.vercel.app/login');
     }
   })(req, res, next);
 };

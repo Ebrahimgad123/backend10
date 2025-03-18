@@ -51,7 +51,7 @@ app.use(passport.session());
 
 
 app.use(cors({
-  origin: ['http://localhost:3000','http://localhost:9000'],
+  origin: ['http://localhost:3000','http://localhost:9000', "https://front-graduation.vercel.app"],
   credentials: true
 }));
 app.use(express.static('public'));
