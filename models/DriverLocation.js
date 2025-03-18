@@ -6,11 +6,11 @@ const driverLocationSchema = new mongoose.Schema({
     required: true,
     ref: 'Driver',
   },
-  latitude: {        //خط العرض 
+  latitude: {        
     type: Number,
     required: true,
   },
-  longitude: {      // خط الطول
+  longitude: {
     type: Number,
     required: true,
   },

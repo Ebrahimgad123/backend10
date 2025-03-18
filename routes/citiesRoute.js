@@ -6,24 +6,17 @@ const Place = require('../models/Place');
 const Tour = require('../models/Tour');
 const geolib = require('geolib');
 
-// الحصول على المدن القريبة
 router.get('/nearby', async (req, res) => {
   const { latitude, longitude } = req.query;
-
-  // تحقق إذا كانت الإحداثيات موجودة
   if (!latitude || !longitude) {
     return res.status(400).json({
       error: "Invalid request",
       details: "Latitude and Longitude are required"
     });
   }
-
-  // تحويل الإحداثيات إلى أرقام
   const lat = parseFloat(latitude);
   const long = parseFloat(longitude);
-
   try {
-    // ابحث عن المدن القريبة واحسب المسافة باستخدام aggregation
     const nearbyCities = await City.aggregate([
       {
         $geoNear: {
@@ -31,9 +24,9 @@ router.get('/nearby', async (req, res) => {
             type: "Point",
             coordinates: [long, lat]
           },
-          distanceField: "distanceFromUser", // سيحفظ الحقل المسافة من المستخدم
+          distanceField: "distanceFromUser",
           spherical: true,
-          maxDistance: 1000000 // المسافة القصوى بالأمتار
+          maxDistance: 1000000 
         }
       },
       {
@@ -42,7 +35,7 @@ router.get('/nearby', async (req, res) => {
           country: 1,
           image: 1,
           location: 1,
-          distanceFromUser: { $floor: { $divide: ["$distanceFromUser", 1000] } } // تحويل المسافة إلى كيلومترات بدون كسور
+          distanceFromUser: { $floor: { $divide: ["$distanceFromUser", 1000] } } 
         }
       }
     ]);
@@ -55,8 +48,6 @@ router.get('/nearby', async (req, res) => {
     });
   }
 });
-
-
 router.get('/tours/nearby', async (req, res) => {
   try {
     const { longitude, latitude, cityId } = req.query;
@@ -72,7 +63,7 @@ router.get('/tours/nearby', async (req, res) => {
       return res.status(400).json({ error: 'إحداثيات غير صالحة.' });
     }
 
-    const maxDistance = 10000000; // Consider making this configurable
+    const maxDistance = 10000000;
     const nearbyTours = await Tour.aggregate([
       {
         $geoNear: {
@@ -111,25 +102,19 @@ router.get('/tours/nearby', async (req, res) => {
 
 router.get('/City/:id', async (req, res) => {
   try {
-    const { id } = req.params; // Get the city ID from the request parameters
-    const city = await City.findById(id); // Find the city and populate the tours
+    const { id } = req.params; 
+    const city = await City.findById(id); 
 
     if (!city) {
-      return res.status(404).json({ error: 'City not found.' }); // Handle case where the city is not found
+      return res.status(404).json({ error: 'City not found.' }); 
     }
 
-    res.json(city); // Return the tours associated with the city
+    res.json(city); 
   } catch (err) {
     console.error('Error fetching tours:', err);
     res.status(500).json({ error: 'حدث خطأ أثناء استرجاع الجولات.' });
   }
 });
-
-
-
-
-
-// الحصول على تفاصيل جولة معينة
 router.get('/tours/:tourId', async (req, res) => {
   try {
     const tour = await Tour.findById(req.params.tourId).populate('places');
@@ -141,10 +126,6 @@ router.get('/tours/:tourId', async (req, res) => {
     res.status(500).json({ error: 'Error retrieving tour', details: error.message });
   }
 });
-
-
-
-
 router.get('/tours', async (req, res) => {
   try {
     const { longitude, latitude } = req.query;
@@ -157,7 +138,7 @@ router.get('/tours', async (req, res) => {
       return res.status(400).json({ error: 'إحداثيات غير صالحة.' });
     }
 
-    const maxDistance = 10000000; // Consider making this configurable
+    const maxDistance = 10000000; 
     const nearbyTours = await Tour.aggregate([
       {
         $geoNear: {
@@ -190,6 +171,4 @@ router.get('/tours', async (req, res) => {
     res.status(500).json({ error: 'حدث خطأ أثناء استرجاع الجولات.' });
   }
 });
-
-
 module.exports = router;
